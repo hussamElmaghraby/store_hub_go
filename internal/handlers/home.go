@@ -3,9 +3,11 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
 	"github.com/hussamElmaghraby/store_hub_go/internal/database"
 	"github.com/hussamElmaghraby/store_hub_go/internal/models"
 	"net/http"
+	"strconv"
 )
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
@@ -42,4 +44,27 @@ func GetAllProducts(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(products)
+}
+
+func GetProductById(w http.ResponseWriter, r *http.Request) {
+	// extract the url parameters using mux
+	vars := mux.Vars(r)
+	idStr, ok := vars["id"]
+	if !ok {
+		http.Error(w, "id is not provided", http.StatusBadRequest)
+	}
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "id is not a number", http.StatusBadRequest)
+		return
+	}
+	var product models.Product
+	result := database.DB.First(&product, id)
+	if result.Error != nil {
+		http.Error(w, "Failed to get product", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(product)
 }
