@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"github.com/hussamElmaghraby/store_hub_go/internal/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
@@ -16,6 +17,7 @@ func InitDB() {
 	if err != nil {
 		log.Fatalf("failed to connect database: %v", err)
 	}
+	db.AutoMigrate(&models.Product{})
 
 	DB = db
 	fmt.Println("Database connected")
