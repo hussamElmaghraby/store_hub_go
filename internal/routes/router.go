@@ -6,6 +6,7 @@ import (
 )
 
 func InitRouter() *mux.Router {
+
 	router := mux.NewRouter()
 	router.HandleFunc("/", handlers.HomeHandler).Methods("GET")
 	router.HandleFunc("/products", handlers.CreatProductHandler).Methods("POST")
@@ -14,5 +15,4 @@ func InitRouter() *mux.Router {
 	router.HandleFunc("/products/{id}", handlers.UpdateProduct).Methods("PUT")
 
 	return router
-
 }
