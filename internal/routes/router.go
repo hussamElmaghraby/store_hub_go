@@ -11,6 +11,7 @@ func InitRouter() *mux.Router {
 	router.HandleFunc("/products", handlers.CreatProductHandler).Methods("POST")
 	router.HandleFunc("/products", handlers.GetAllProducts).Methods("GET")
 	router.HandleFunc("/products/{id}", handlers.GetProductById).Methods("GET")
+	router.HandleFunc("/products/{id}", handlers.UpdateProduct).Methods("PUT")
 
 	return router
 
