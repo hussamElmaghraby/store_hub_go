@@ -53,3 +53,34 @@ func UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(product)
 
 }
+
+func DeleteProduct(w http.ResponseWriter, r *http.Request) {
+	// extract the id from the url parameters
+	vars := mux.Vars(r)
+	idStr := vars["id"]
+	// covert ID to int
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Invalid product ID", http.StatusBadRequest)
+		return
+	}
+	// find the product by ID
+	var product models.Product
+	result := database.DB.First(&product, id)
+	if result.Error != nil {
+		http.Error(w, "Product not found", http.StatusNotFound)
+		return
+	}
+
+	// delete the product
+	deleteResult := database.DB.Delete(&product)
+	if deleteResult.Error != nil {
+		http.Error(w, "Failed to delete product", http.StatusInternalServerError)
+		return
+	}
+	// return delete result
+	json.NewEncoder(w).Encode(product)
+	// return a success message
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+}

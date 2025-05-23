@@ -13,6 +13,7 @@ func InitRouter() *mux.Router {
 	router.HandleFunc("/products", handlers.GetAllProducts).Methods("GET")
 	router.HandleFunc("/products/{id}", handlers.GetProductById).Methods("GET")
 	router.HandleFunc("/products/{id}", handlers.UpdateProduct).Methods("PUT")
+	router.HandleFunc("/products/{id}", handlers.DeleteProduct).Methods("DELETE")
 
 	return router
 }
